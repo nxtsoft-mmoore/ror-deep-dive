@@ -1,0 +1,29 @@
+<h1>Places</h1>
+<table>
+  <tr>
+  <td>Name:</td>
+  <td>Latitude:</td>
+  <td>Longitude:</td>
+  </tr>
+  <% @places.each do |place| %>
+  <tr>
+    <td><%= place.name %></td>
+    <td><%= place.latitude %></td>
+    <td><%= place.longitude %></td>
+  </tr>
+  <% end %>
+</table>
+<h2>Create Place</h2>
+<%= form_with(url: "/places", method: "post") do %>
+
+  <%= label_tag(:name, "Name") %>
+  <%= text_field_tag(:name) %><br />
+
+  <%= label_tag(:latitude, "Latitude") %>
+  <%= text_field_tag(:latitude) %><br />
+
+  <%= label_tag(:longitude, "Longitude") %>
+  <%= text_field_tag(:longitude) %><br />
+
+  <%= submit_tag("Create") %>
+<% end %>
