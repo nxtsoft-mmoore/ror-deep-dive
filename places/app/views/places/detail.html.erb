@@ -1,0 +1,21 @@
+<%= link_to "home", "/" %>
+<h1><%= @place.name %></h1>
+  <ul>
+      <li>Latitude: <%= @place.longitude %></li>
+    <li>Longitude: <%= @place.latitude %></li>
+  </ul>
+
+<h2>Update Place</h2>
+<%= form_with(url: @place, method: "patch") do %>
+
+  <%= label_tag(:name, "Name") %>
+  <%= text_field_tag(:name) %><br />
+
+  <%= label_tag(:latitude, "Latitude") %>
+  <%= text_field_tag(:latitude) %><br />
+
+  <%= label_tag(:longitude, "Longitude") %>
+  <%= text_field_tag(:longitude) %><br />
+
+  <%= submit_tag("Create") %>
+<% end %>

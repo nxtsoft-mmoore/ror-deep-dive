@@ -1,15 +1,17 @@
 <h1>Places</h1>
 <table>
   <tr>
-  <td>Name:</td>
-  <td>Latitude:</td>
-  <td>Longitude:</td>
+    <td>Name</td>
+    <td>Latitude</td>
+    <td>Longitude</td>
+    <td>Delete</td>
   </tr>
   <% @places.each do |place| %>
   <tr>
-    <td><%= place.name %></td>
+    <td><%= link_to place.name, place %></td>
     <td><%= place.latitude %></td>
     <td><%= place.longitude %></td>
+    <td><%= link_to place, method: :delete, class: "btn btn-sm" do %>Delete<% end %></td>
   </tr>
   <% end %>
 </table>
