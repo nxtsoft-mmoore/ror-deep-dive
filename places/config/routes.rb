@@ -4,4 +4,6 @@ Rails.application.routes.draw do
 
   resources :places
 
+  get 'api/places_list', to: 'places#api_list'
+
 end

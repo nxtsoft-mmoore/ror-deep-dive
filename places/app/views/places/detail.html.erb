@@ -9,13 +9,13 @@
 <%= form_with(url: @place, method: "patch") do %>
 
   <%= label_tag(:name, "Name") %>
-  <%= text_field_tag(:name) %><br />
+  <%= text_field_tag(:name,  @place.name)%><br />
 
   <%= label_tag(:latitude, "Latitude") %>
-  <%= text_field_tag(:latitude) %><br />
+  <%= text_field_tag(:latitude, @place.latitude) %><br />
 
   <%= label_tag(:longitude, "Longitude") %>
-  <%= text_field_tag(:longitude) %><br />
+  <%= text_field_tag(:longitude, @place.longitude) %><br />
 
-  <%= submit_tag("Create") %>
+  <%= submit_tag("Update") %>
 <% end %>

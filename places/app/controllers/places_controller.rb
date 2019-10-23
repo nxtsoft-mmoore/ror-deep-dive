@@ -1,6 +1,19 @@
 class PlacesController < ApplicationController
 
   def index
+
+    if request.location.latitude
+        @session_info = {
+          "lat" => request.location.latitude,
+          "long" => request.location.longitude,
+        }
+    else
+      @session_info = {
+        "lat" => "35.7596",
+        "long" => "79.0193",
+      }
+    end
+
     @places = Place.all()
   end
 
@@ -29,6 +42,12 @@ class PlacesController < ApplicationController
 
     redirect_to @place
   end
+
+  def api_list
+    @places = Place.all()
+    render json: @places
+  end
+
 
   private
 

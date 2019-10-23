@@ -1,9 +1,70 @@
-<h1>Places</h1>
+<!-- Jquery -->
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+
+<!-- my ajax request -->
+<script>
+$.ajax({
+  type: "GET",
+  url: "/api/places_list",
+  dataType: "json",
+  success: function(response){
+    // convert string to JSON
+    $(function() {
+      $.each(response, function(i, item) {
+          var tr = $('<tr>').append(
+              $('<td>').text(item.name),
+              $('<td>').text(item.latitude),
+              $('<td>').text(item.longitude),
+              $('<td>').append(
+                $('<a>')
+                  .attr("href", "https://www.google.com/maps/search/?api=1&query=" + item.latitude + ',' + item.longitude)
+                  .text("Map")
+              ),
+              $('<td>').append(
+                $('<a>')
+                  .attr("href", "/places/" + item.id)
+                  .attr("class", "btn btn-sm")
+                  .attr("rel", "nofollow")
+                  .attr("data-method", "delete")
+                  .text("Delete")
+              )
+            )
+          //.appendTo('#records_table');
+          $("#places-table").append(tr);
+          });
+
+      });
+    }
+});
+</script>
+
+<h1>Your Location</h1>
+<p><b>latitude:</b> <%= @session_info["lat"] %></p>
+<p><b>longitude:</b> <%= @session_info["long"] %></p>
+
+
+<h1>Places Loaded from API</h1>
+<table id="places-table">
+  <tr>
+    <td>Name</td>
+    <td>Latitude</td>
+    <td>Longitude</td>
+    <td>Map</td>
+    <td>Delete</td>
+  </tr>
+</table>
+
+
+<h1>Places Loaded from Database</h1>
 <table>
   <tr>
     <td>Name</td>
     <td>Latitude</td>
     <td>Longitude</td>
+    <td>Map</td>
     <td>Delete</td>
   </tr>
   <% @places.each do |place| %>
@@ -11,10 +72,15 @@
     <td><%= link_to place.name, place %></td>
     <td><%= place.latitude %></td>
     <td><%= place.longitude %></td>
+    <td>
+      <a href="https://www.google.com/maps/search/?api=1&query=<%= place.latitude %> ,<%=place.longitude %>">Map</a>
+    </td>
     <td><%= link_to place, method: :delete, class: "btn btn-sm" do %>Delete<% end %></td>
   </tr>
   <% end %>
 </table>
+
+
 <h2>Create Place</h2>
 <%= form_with(url: "/places", method: "post") do %>
 
