@@ -1,5 +1,7 @@
 class PlacesController < ApplicationController
 
+  skip_before_action :verify_authenticity_token
+
   def index
 
     if request.location.latitude
@@ -9,8 +11,8 @@ class PlacesController < ApplicationController
         }
     else
       @session_info = {
-        "lat" => "35.7596",
-        "long" => "79.0193",
+        "lat" => 33.749,
+        "long" => -84.388,
       }
     end
 
@@ -48,6 +50,10 @@ class PlacesController < ApplicationController
     render json: @places
   end
 
+  def api_distance
+    @distance = Geocoder::Calculations.distance_between([params[:lat1],params[:long1]], [params[:lat2],params[:long2]])
+    render json: @distance
+  end
 
   private
 
@@ -55,4 +61,7 @@ class PlacesController < ApplicationController
     params.permit(:name, :longitude, :latitude)
   end
 
+  def api_disatnce_params
+    params.permit(:lat1, :long1, :lat2, :long2)
+  end
 end

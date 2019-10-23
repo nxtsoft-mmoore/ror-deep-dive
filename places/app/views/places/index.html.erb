@@ -4,9 +4,10 @@
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
 
-<!-- my ajax request -->
+<!-- my ajax requests -->
 <script>
 $.ajax({
+  // get all of the places in the database
   type: "GET",
   url: "/api/places_list",
   dataType: "json",
@@ -14,37 +15,68 @@ $.ajax({
     // convert string to JSON
     $(function() {
       $.each(response, function(i, item) {
-          var tr = $('<tr>').append(
-              $('<td>').text(item.name),
-              $('<td>').text(item.latitude),
-              $('<td>').text(item.longitude),
-              $('<td>').append(
-                $('<a>')
-                  .attr("href", "https://www.google.com/maps/search/?api=1&query=" + item.latitude + ',' + item.longitude)
-                  .text("Map")
-              ),
-              $('<td>').append(
-                $('<a>')
-                  .attr("href", "/places/" + item.id)
-                  .attr("class", "btn btn-sm")
-                  .attr("rel", "nofollow")
-                  .attr("data-method", "delete")
-                  .text("Delete")
-              )
-            )
-          //.appendTo('#records_table');
-          $("#places-table").append(tr);
-          });
-
+        var tr = $('<tr>').append(
+          $('<td>').append(
+            $('<a>')
+              .attr("href", "/places/" + item.id)
+              .text(item.name)
+            ),
+          $('<td>').text(item.latitude),
+          $('<td>').text(item.longitude),
+          $('<td>').append(
+            $('<a>')
+              .attr("href", "https://www.google.com/maps/search/?api=1&query=" + item.latitude + ',' + item.longitude)
+              .text("Map")
+          ),
+          $('<td>').append(
+            $('<a>')
+              .attr("href", "/places/" + item.id)
+              .attr("class", "btn btn-sm")
+              .attr("rel", "nofollow")
+              .attr("data-method", "delete")
+              .text("Delete")
+          ),
+        );
+        //.appendTo('#records_table');
+        $("#places-table").append(tr);
+        // measure distance from current location
+        calculateDistance(tr, item.latitude, item.longitude);
       });
-    }
+    });
+  }
 });
+
+
+
+function calculateDistance(tr, lat, long){
+  $.ajax({
+    data: {
+      "lat1": <%= @session_info["lat"] %>,
+      "long1": <%= @session_info["long"] %>,
+      "lat2": lat,
+      "long2": long
+    },
+    type: "POST",
+    url: "/api/distance",
+    dataType: "json",
+    success: function(response){
+      tr.append($('<td>').text(response));
+    }
+  });
+
+};
+
+function returnDistance(data){
+  distance = data;
+  return distance;
+};
+
+
 </script>
 
 <h1>Your Location</h1>
 <p><b>latitude:</b> <%= @session_info["lat"] %></p>
 <p><b>longitude:</b> <%= @session_info["long"] %></p>
-
 
 <h1>Places Loaded from API</h1>
 <table id="places-table">
@@ -54,6 +86,7 @@ $.ajax({
     <td>Longitude</td>
     <td>Map</td>
     <td>Delete</td>
+    <td>Distance (mi)</td>
   </tr>
 </table>
 
